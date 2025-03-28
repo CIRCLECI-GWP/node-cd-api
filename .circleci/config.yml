@@ -20,7 +20,9 @@ jobs:
     executor: node/default
     steps:
       - checkout
+
       - azure-cli/install
+
       - azure-cli/login-with-service-principal:
           azure-sp: AZURE_CLIENT_ID
           azure-sp-password: AZURE_CLIENT_SECRET
@@ -28,8 +30,15 @@ jobs:
 
       - run:
           name: Set subscription
+          command: az account set --subscription $AZURE_SUBSCRIPTION_ID
+
+      - run:
+          name: Enable auto npm install (SCM_DO_BUILD_DURING_DEPLOYMENT)
           command: |
-            az account set --subscription $AZURE_SUBSCRIPTION_ID
+            az webapp config appsettings set \
+              --resource-group $AZURE_RG \
+              --name $AZURE_APP_NAME \
+              --settings SCM_DO_BUILD_DURING_DEPLOYMENT=true
 
       - run:
           name: Zip app and deploy
