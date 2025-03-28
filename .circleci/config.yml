@@ -20,9 +20,7 @@ jobs:
     executor: node/default
     steps:
       - checkout
-
       - azure-cli/install
-
       - azure-cli/login-with-service-principal:
           azure-sp: AZURE_CLIENT_ID
           azure-sp-password: AZURE_CLIENT_SECRET
